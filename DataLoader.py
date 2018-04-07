@@ -22,10 +22,13 @@ class DataLoader(object):
 
     def get(self, subject=None, start=0, end=None):
         if subject is None:
+            # Get all
             return {k: v[start:end if end is not None else len(v)] for k, v in self.samples}
         elif isinstance(subject, (list, tuple)):
+            # Get subset of subjects
             return {k: v[start:end if end is not None else len(v)] for k, v in self.samples.items() if k in subject}
         elif subject in self.samples:
+            # Get single subject
             return self.samples[subject][start:end if end is not None else len(self.samples[subject])]
         else:
             return None
