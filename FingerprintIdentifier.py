@@ -1,29 +1,25 @@
-import numpy as np
-import sklearn
+import sklearn.svm
 
 
 class FingerprintIdentifier(object):
 
     def __init__(self, data):
         self.data = data
-        self.models = [sklearn.svm.SVC() for _ in range(21)]
+        self.model = sklearn.svm.SVC(decision_function_shape='ovr')
         self.train()
 
-    def model(self, subject):
-        return self.models[subject-1]
-
     def train(self):
-        for subject in self.data.keys():
-            model = self.model(subject)
-            x = self.data[subject]
-            y = [1] * len(x)
-            for k, v in self.data.items():
-                if k == subject:
-                    continue
-                x.extend(v)
-                y.extend([0] * len(v))
-            model.fit(x, y)
+        subjStart = {}
+        subjEnd = {}
+        x = []
+        y = []
+        for subject in sorted(self.data.keys()):
+            subjStart[subject] = len(x)
+            x.extend(self.data[subject])
+            subjEnd[subject] = len(x)
+            y.extend([subject] * len(self.data[subject]))
+
+        self.model.fit(x, y)
 
     def identify(self, data):
-        predictions = np.array([model.predict(data) for model in self.models])
-        return predictions.argmax()
+        return self.model.predict(data)[0]
