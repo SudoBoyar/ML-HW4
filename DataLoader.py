@@ -19,7 +19,7 @@ class DataLoader(object):
         self.resize = (slice(height_start, height_end), slice(width_start, width_end))
 
         self.pca_components = pca_components
-        self.pca_model = None
+        self.pca_model = PCA(n_components=self.pca_components)
 
         self.use_gabor = use_gabor
         self.gabor_kernels = None
@@ -27,7 +27,13 @@ class DataLoader(object):
         self.samples = {}
 
     def load_file(self, filename):
-        return self.preprocess(imread(filename))
+        sample = self.preprocess(imread(filename))
+
+        if self.pca_components is not None:
+            sample = self.pca_model.transform([sample])
+            sample = sample.ravel()
+
+        return [sample]
 
     def load_samples(self, folder='training'):
         files = sorted(os.listdir(folder))
@@ -44,8 +50,6 @@ class DataLoader(object):
 
         if self.pca_components is not None:
             self.pca()
-
-        print(self.samples[1][0].shape)
 
     def get(self, subject=None, start=0, end=None):
         if subject is None:
@@ -90,7 +94,6 @@ class DataLoader(object):
         return sample
 
     def pca(self):
-        self.pca_model = PCA(n_components=self.pca_components)
         x = []
         for k, samples in self.samples.items():
             x.extend(samples)
