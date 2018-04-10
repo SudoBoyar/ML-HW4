@@ -126,7 +126,7 @@ class DataLoader(object):
         # plt.imshow(sample)
         for kernel in self.get_gabor_kernels():
             # Mode in {‘reflect’,’constant’,’nearest’,’mirror’, ‘wrap’}
-            result = convolve(sample, np.real(kernel), mode='wrap')
+            result = convolve(sample, np.real(kernel), mode='nearest')
             features.append(result.mean())
             features.append(result.std())
             features.append(result.var())

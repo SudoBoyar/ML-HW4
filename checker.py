@@ -7,25 +7,69 @@ from FingerprintIdentifier import FingerprintIdentifier
 
 
 def test(args):
-    loader = DataLoader(pca_components=5)
+    loader = DataLoader()
     loader.load_samples()
 
-    identifier = FingerprintIdentifier(loader.get())
-    test = loader.get()
+    identifier = FingerprintIdentifier(loader.get(start=1))
+    test = loader.get(start=0, end=1)
     correct = 0
     incorrect = 0
     total = 0
     for k, vs in test.items():
         for v in vs:
             prediction = identifier.identify([v])
-            print("Actual ", k, " Predicted ", prediction)
+            # print("Actual ", k, " Predicted ", prediction)
             if k == prediction:
                 correct += 1
             else:
                 incorrect += 1
             total += 1
 
-    print(correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+    print("SVM: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+
+    del loader
+
+    loader = DataLoader(use_gabor=True)
+    loader.load_samples()
+
+    identifier = FingerprintIdentifier(loader.get(start=1))
+    test = loader.get(start=0, end=1)
+    correct = 0
+    incorrect = 0
+    total = 0
+    for k, vs in test.items():
+        for v in vs:
+            prediction = identifier.identify([v])
+            # print("Actual ", k, " Predicted ", prediction)
+            if k == prediction:
+                correct += 1
+            else:
+                incorrect += 1
+            total += 1
+
+    print("Gabor Filter: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+
+    del loader
+
+    loader = DataLoader(pca_components=1000)
+    loader.load_samples()
+
+    identifier = FingerprintIdentifier(loader.get(start=1))
+    test = loader.get(start=0, end=1)
+    correct = 0
+    incorrect = 0
+    total = 0
+    for k, vs in test.items():
+        for v in vs:
+            prediction = identifier.identify([v])
+            # print("Actual ", k, " Predicted ", prediction)
+            if k == prediction:
+                correct += 1
+            else:
+                incorrect += 1
+            total += 1
+
+    print("PCA: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
 
 
 def main(args):
@@ -36,6 +80,18 @@ def main(args):
         if os.path.isdir(first):
             training = first
             testing = args.filename[1:]
+
+    loader = DataLoader()
+    loader.load_samples(folder=training)
+
+    identifier = FingerprintIdentifier(loader.get())
+    for filename in testing:
+        f = loader.load_file(filename)
+        prediction = identifier.identify(f)
+
+        print("Unfiltered Predicted ", prediction, ' for ', filename)
+
+    del loader
 
     loader = DataLoader(use_gabor=True)
     loader.load_samples(folder=training)

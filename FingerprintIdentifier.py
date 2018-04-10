@@ -5,7 +5,7 @@ class FingerprintIdentifier(object):
 
     def __init__(self, data):
         self.data = data
-        self.model = sklearn.svm.SVC(decision_function_shape='ovr')
+        self.model = sklearn.svm.SVC(decision_function_shape='ovr', gamma=1e-4)
         self.train()
 
     def train(self):
