@@ -56,7 +56,7 @@ def test(args):
                 incorrect += 1
             total += 1
 
-    print("Unfiltered Data: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+    print("Unfiltered Data: {:.3f}% correct {:.3f}% incorrect".format(correct/total * 100, incorrect/total * 100))
 
     del loader
 
@@ -82,11 +82,11 @@ def test(args):
                 incorrect += 1
             total += 1
 
-    print("Gabor Filter: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+    print("Gabor Filter: {:.3f}% correct {:.3f}% incorrect".format(correct/total * 100, incorrect/total * 100))
 
     del loader
 
-    loader = DataLoader(pca_components=1000)
+    loader = DataLoader(pca_components=3)
     with Timer('Load PCA Data', useTimer):
         loader.load_samples()
 
@@ -107,7 +107,7 @@ def test(args):
                 incorrect += 1
             total += 1
 
-    print("PCA: ", correct/total * 100, '% correct ', incorrect/total * 100, '% incorrect')
+    print("PCA: {:.3f}% correct {:.3f}% incorrect".format(correct/total * 100, incorrect/total * 100))
 
 
 def main(args):
@@ -145,7 +145,7 @@ def main(args):
 
     del loader
 
-    loader = DataLoader(pca_components=1000)
+    loader = DataLoader(pca_components=3)
     loader.load_samples(folder=training)
 
     identifier = FingerprintIdentifier(loader.get())
