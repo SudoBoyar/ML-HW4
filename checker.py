@@ -7,7 +7,7 @@ from DataLoader import DataLoader
 from FingerprintIdentifier import FingerprintIdentifier
 
 
-class Timer:
+class Timer(object):
     """
     with Timer("name"): to make timing easier
     """

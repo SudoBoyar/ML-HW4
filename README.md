@@ -1,3 +1,7 @@
+## ML-HW4
+Multiclass fingerprint identification using SVM.
+
+
 To run:
 
 python checker.py \[path/to/training/folder/\] path/to/test_file1.bmp \[path/to/test_file2.bmp ...\]
@@ -14,6 +18,6 @@ would train on all files in the `training_set_b` folder, and then test all files
 It doesn't recurse on the test folder on its own, it needs `folder/*`.
 
 
-`python checker.py 1_1.bmp`
+`python checker.py test.bmp`
 
-would train on all files in `training/` and test on `1_1.bmp`
+would train on all files in `training/` and test on `test.bmp`
